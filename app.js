@@ -24,7 +24,17 @@ function setAuthMsg(msg, ok=true){ const m=el('authMessage'); m.textContent=msg;
 async function loadData(){
   const res = await fetch('data/app-data.json', { cache: 'no-store' });
   if(!res.ok) throw new Error('No se pudo cargar la data del dashboard.');
-  return res.json();
+  const raw = await res.text();
+  const cleaned = raw
+    .replace(/\bNaN\b/g, 'null')
+    .replace(/\bInfinity\b/g, 'null')
+    .replace(/\b-Infinity\b/g, 'null');
+  try {
+    return JSON.parse(cleaned);
+  } catch (e) {
+    console.error('JSON inválido en app-data.json', e);
+    throw new Error('La data del dashboard llegó con formato inválido.');
+  }
 }
 
 async function login(){
