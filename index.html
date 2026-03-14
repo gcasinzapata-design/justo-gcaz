@@ -19,16 +19,15 @@
         <span class="pill pill-tambo">Tambo</span>
       </div>
       <h1>Control Center</h1>
-      <p>Acceso privado por código dinámico enviado al correo. Permitido solo para dominios <b>@getjusto.com</b>, <b>@indriver.com</b> y <b>@lindcorp.pe</b>.</p>
+      <p>Acceso privado con credenciales compartidas para el equipo del proyecto. La vista pública está deshabilitada.</p>
       <div class="auth-form">
-        <label>Correo corporativo</label>
-        <input id="emailInput" type="email" placeholder="nombre@empresa.com" />
-        <button id="sendCodeBtn" class="btn btn-primary">Enviar código</button>
+        <label>Usuario</label>
+        <input id="usernameInput" type="text" placeholder="Usuario" value="" />
       </div>
-      <div id="otpBox" class="auth-form hidden">
-        <label>Código dinámico</label>
-        <input id="otpInput" type="text" maxlength="6" placeholder="6 dígitos" />
-        <button id="verifyCodeBtn" class="btn btn-dark">Ingresar</button>
+      <div class="auth-form">
+        <label>Clave</label>
+        <input id="passwordInput" type="password" placeholder="Clave" value="" />
+        <button id="loginBtn" class="btn btn-primary">Ingresar</button>
       </div>
       <p id="authMessage" class="auth-message"></p>
     </div>

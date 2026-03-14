@@ -1,14 +1,15 @@
 const state = {
   raw: null,
-  token: localStorage.getItem('tambo_session') || '',
-  challenge: sessionStorage.getItem('tambo_challenge') || '',
-  email: sessionStorage.getItem('tambo_email') || '',
+  isAuthenticated: localStorage.getItem('tambo_session') === 'ok',
   filters: { months: [], macroRegions: [], zones: [], areas: [], locals: [], distanceMin: null, distanceMax: null },
   sort: { key: 'orders', dir: 'desc' },
   charts: {},
   map: null,
   mapLayers: { stores: null, priority: null, demand: null }
 };
+
+const AUTH_USER = 'TamboID';
+const AUTH_PASS = 'indrive.foodxjusto';
 
 const el = id => document.getElementById(id);
 const money = v => new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(v || 0);
@@ -18,51 +19,34 @@ const minFmt = v => v == null || Number.isNaN(v) ? '—' : `${Number(v).toFixed(
 const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
 const median = arr => { if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2? s[m] : (s[m-1]+s[m])/2; };
 
-const allowedDomains = ['getjusto.com','indriver.com','lindcorp.pe'];
-function validDomain(email=''){ return allowedDomains.includes((email.split('@')[1] || '').toLowerCase()); }
+function setAuthMsg(msg, ok=true){ const m=el('authMessage'); m.textContent=msg; m.className=`auth-message ${ok?'good':'bad'}`; }
 
-async function api(path, options={}) {
-  const headers = options.headers || {};
-  if (state.token) headers.Authorization = `Bearer ${state.token}`;
-  const res = await fetch(path, { ...options, headers });
-  const data = await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error(data.error || 'Error inesperado');
-  return data;
+async function loadData(){
+  const res = await fetch('data/app-data.json', { cache: 'no-store' });
+  if(!res.ok) throw new Error('No se pudo cargar la data del dashboard.');
+  return res.json();
 }
 
-async function requestOtp() {
-  const email = el('emailInput').value.trim().toLowerCase();
-  if(!validDomain(email)) return setAuthMsg('Usa un correo permitido de Justo, inDrive o Lindcorp.', false);
-  setAuthMsg('Enviando código…', true);
-  const data = await api('/.netlify/functions/request-otp', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }) });
-  state.challenge = data.challenge; state.email = email;
-  sessionStorage.setItem('tambo_challenge', data.challenge); sessionStorage.setItem('tambo_email', email);
-  el('otpBox').classList.remove('hidden');
-  setAuthMsg('Código enviado. Revisa tu correo corporativo.', true);
-}
-
-async function verifyOtp() {
-  const code = el('otpInput').value.trim();
-  if(!state.challenge || !state.email) return setAuthMsg('Primero solicita el código.', false);
-  const data = await api('/.netlify/functions/verify-otp', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: state.email, code, challenge: state.challenge }) });
-  state.token = data.token;
-  localStorage.setItem('tambo_session', data.token);
+async function login(){
+  const user = el('usernameInput').value.trim();
+  const pass = el('passwordInput').value;
+  if(user !== AUTH_USER || pass !== AUTH_PASS) return setAuthMsg('Usuario o clave inválidos.', false);
+  localStorage.setItem('tambo_session', 'ok');
+  state.isAuthenticated = true;
   await loadApp();
 }
 
-function setAuthMsg(msg, ok=true){ const m=el('authMessage'); m.textContent=msg; m.className=`auth-message ${ok?'good':'bad'}`; }
-
 async function loadApp(){
   try {
-    const payload = await api('/.netlify/functions/app-data');
+    const payload = await loadData();
     state.raw = payload;
     el('authGate').classList.add('hidden'); el('app').classList.remove('hidden');
     initFilters(); hydrateHero(); initMap(); render();
   } catch(err) {
     localStorage.removeItem('tambo_session');
-    state.token='';
+    state.isAuthenticated = false;
     el('authGate').classList.remove('hidden'); el('app').classList.add('hidden');
-    setAuthMsg(err.message || 'No se pudo validar la sesión.', false);
+    setAuthMsg(err.message || 'No se pudo abrir la aplicación.', false);
   }
 }
 
@@ -356,7 +340,8 @@ function sortValue(a,b,key,dir){ const va=a[key] ?? '', vb=b[key] ?? ''; return 
 function escapeHtml(s=''){ return String(s).replace(/[&<>"]+/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c] || c)); }
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  el('sendCodeBtn').addEventListener('click', ()=>requestOtp().catch(e=>setAuthMsg(e.message,false)));
-  el('verifyCodeBtn').addEventListener('click', ()=>verifyOtp().catch(e=>setAuthMsg(e.message,false)));
-  state.token ? loadApp() : setAuthMsg('Ingresa con tu correo corporativo para desbloquear la web.', true);
+  el('loginBtn').addEventListener('click', ()=>login().catch(e=>setAuthMsg(e.message,false)));
+  el('passwordInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') login().catch(err=>setAuthMsg(err.message,false)); });
+  el('usernameInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') login().catch(err=>setAuthMsg(err.message,false)); });
+  state.isAuthenticated ? loadApp() : setAuthMsg('Ingresa con usuario y clave para desbloquear la web.', true);
 });
