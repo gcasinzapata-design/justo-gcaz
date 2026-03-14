@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tambo × inDrive | Control Center</title>
+  <title>Tambo × inDrive × Justo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,160 +11,254 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="authGate" class="auth-shell">
+  <section id="authGate" class="auth-shell">
     <div class="auth-card">
-      <div class="brand-row">
-        <span class="pill pill-justo">Justo</span>
-        <span class="pill pill-indrive">inDrive</span>
-        <span class="pill pill-tambo">Tambo</span>
+      <div class="brand-strip">
+        <span class="brand-pill brand-justo">Justo</span>
+        <span class="brand-pill brand-indrive">inDrive</span>
+        <span class="brand-pill brand-tambo">Tambo</span>
       </div>
-      <h1>Control Center</h1>
-      <p>Acceso privado con credenciales compartidas para el equipo del proyecto. La vista pública está deshabilitada.</p>
+      <p class="eyebrow">Acceso privado</p>
+      <h1>Proyecto Tambo × inDrive</h1>
+      <p>Ingresa con las credenciales autorizadas para revisar la evolución del negocio, el desempeño del proyecto y el plan de activación por zonas.</p>
       <div class="auth-form">
         <label>Usuario</label>
-        <input id="usernameInput" type="text" placeholder="Usuario" value="" />
-      </div>
-      <div class="auth-form">
+        <input id="usernameInput" placeholder="Usuario" />
         <label>Clave</label>
-        <input id="passwordInput" type="password" placeholder="Clave" value="" />
+        <input id="passwordInput" type="password" placeholder="Clave" />
         <button id="loginBtn" class="btn btn-primary">Ingresar</button>
+        <div id="authMessage" class="auth-message"></div>
       </div>
-      <p id="authMessage" class="auth-message"></p>
     </div>
-  </div>
+  </section>
 
   <div id="app" class="hidden">
-    <header class="hero">
-      <nav class="topbar">
-        <div class="logo-stack">
-          <div class="brand-row">
-            <span class="pill pill-justo">Justo</span>
-            <span class="pill pill-indrive">inDrive</span>
-            <span class="pill pill-tambo">Tambo</span>
-          </div>
-          <div>
-            <div class="eyebrow">Tambo × inDrive</div>
-            <h1>Commerce & Activation Control Center</h1>
-            <p class="hero-copy">Vista unificada del e-commerce de Tambo, la operación delivery, y el módulo de activación del proyecto para decidir cobertura, visibilidad y staffing con más claridad.</p>
-          </div>
+    <header class="hero-shell">
+      <div class="hero-left">
+        <div class="brand-strip">
+          <span class="brand-pill brand-justo">Justo</span>
+          <span class="brand-pill brand-indrive">inDrive</span>
+          <span class="brand-pill brand-tambo">Tambo</span>
         </div>
-        <div class="hero-bubbles">
-          <div class="bubble"><span>Red total</span><strong id="bubbleTotalLocals">-</strong></div>
-          <div class="bubble"><span>Locales activos</span><strong id="bubbleActiveLocals">-</strong></div>
-          <div class="bubble"><span>Delivery habilitado</span><strong id="bubbleDelivery">-</strong></div>
-          <div class="bubble"><span>Retiro habilitado</span><strong id="bubblePickup">-</strong></div>
+        <p class="eyebrow">Control hub</p>
+        <h1>Tambo × inDrive</h1>
+        <p class="hero-copy">Vista integrada del e-commerce total de Tambo, la operación delivery observada y el módulo de proyección para definir cobertura, visibilidad y staffing requerido por zona.</p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-bubble">
+          <span>Red total Tambo</span>
+          <strong id="bubbleNetworkTotal">—</strong>
         </div>
-      </nav>
+        <div class="hero-bubble">
+          <span>Locales activos observados</span>
+          <strong id="bubbleNetworkActive">—</strong>
+        </div>
+        <div class="hero-bubble">
+          <span>Delivery habilitado</span>
+          <strong id="bubbleDelivery">—</strong>
+        </div>
+        <div class="hero-bubble">
+          <span>Retiro habilitado</span>
+          <strong id="bubblePickup">—</strong>
+        </div>
+      </div>
     </header>
 
-    <main class="main-shell">
-      <section class="filter-panel card">
-        <div class="section-head">
+    <nav class="section-nav">
+      <a href="#overview">Overview</a>
+      <a href="#ecommerce">E-commerce total</a>
+      <a href="#project">Proyecto</a>
+      <a href="#operations">Operación</a>
+      <a href="#coverage">Cobertura</a>
+      <a href="#locals">Locales</a>
+      <button id="logoutBtn" class="btn btn-light small">Salir</button>
+    </nav>
+
+    <main class="page-shell">
+      <section class="card filter-card-shell">
+        <div class="section-title-row">
           <div>
-            <span class="eyebrow">Filtros agregativos</span>
-            <h2>Explora el negocio y el proyecto</h2>
+            <p class="eyebrow">Filtros</p>
+            <h2>Lectura agregativa del negocio y del proyecto</h2>
           </div>
-          <button id="resetFiltersBtn" class="btn btn-ghost">Limpiar filtros</button>
+          <button id="resetFiltersBtn" class="btn btn-light">Limpiar filtros</button>
         </div>
-        <div class="filters-grid" id="filtersGrid"></div>
-        <div class="distance-wrap">
+        <div id="filtersGrid" class="filters-grid"></div>
+        <div class="range-row">
           <div>
-            <label>Distancia desde (m)</label>
-            <input id="distanceMin" type="number" min="0" step="100" placeholder="0" />
+            <label>Distancia desde (km)</label>
+            <input id="distanceMin" type="number" min="0" step="0.1" placeholder="0.0" />
           </div>
           <div>
-            <label>Distancia hasta (m)</label>
-            <input id="distanceMax" type="number" min="0" step="100" placeholder="5000" />
+            <label>Distancia hasta (km)</label>
+            <input id="distanceMax" type="number" min="0" step="0.1" placeholder="5.0" />
           </div>
         </div>
       </section>
 
-      <section class="highlights-grid">
-        <article class="card span-8">
-          <div class="section-head compact"><div><span class="eyebrow">Key highlights</span><h2>Lo más importante del corte actual</h2></div></div>
-          <div id="highlightsList" class="highlights-list"></div>
-        </article>
-        <article class="card span-4">
-          <div class="section-head compact"><div><span class="eyebrow">Mix del negocio</span><h2>E-commerce Tambo</h2></div></div>
-          <div class="mix-block" id="mixBlock"></div>
-        </article>
-      </section>
-
-      <section class="kpi-grid" id="kpiGrid"></section>
-
-      <section class="story-grid">
-        <article class="card span-6">
-          <div class="section-head compact"><div><span class="eyebrow">Bloque 1</span><h2>Oportunidad</h2></div></div>
-          <div id="opportunityNarrative" class="narrative"></div>
-        </article>
-        <article class="card span-6">
-          <div class="section-head compact"><div><span class="eyebrow">Bloque 2</span><h2>Cobertura</h2></div></div>
-          <div id="coverageNarrative" class="narrative"></div>
-        </article>
-        <article class="card span-6">
-          <div class="section-head compact"><div><span class="eyebrow">Bloque 3</span><h2>Riesgo operativo</h2></div></div>
-          <div id="riskNarrative" class="narrative"></div>
-        </article>
-        <article class="card span-6 accent-card">
-          <div class="section-head compact"><div><span class="eyebrow">Bloque 4</span><h2>Plan de activación por zonas</h2></div></div>
-          <div id="activationNarrative" class="narrative"></div>
-        </article>
-      </section>
-
-      <section class="chart-grid">
-        <article class="card span-7">
-          <div class="section-head compact"><div><span class="eyebrow">Tambo</span><h2>Evolución mensual del e-commerce</h2></div></div>
-          <canvas id="monthlyChart" class="chart-canvas"></canvas>
-        </article>
-        <article class="card span-5">
-          <div class="section-head compact"><div><span class="eyebrow">Proyecto</span><h2>Etapas del ciclo del pedido</h2></div></div>
-          <canvas id="cycleChart" class="chart-canvas"></canvas>
-        </article>
-        <article class="card span-6">
-          <div class="section-head compact"><div><span class="eyebrow">Demanda potencial</span><h2>Zonas prioritarias para activar</h2></div></div>
-          <canvas id="priorityChart" class="chart-canvas"></canvas>
-        </article>
-        <article class="card span-6">
-          <div class="section-head compact"><div><span class="eyebrow">Drivers</span><h2>Drivers activos por mes</h2></div></div>
-          <canvas id="driversChart" class="chart-canvas"></canvas>
-        </article>
-      </section>
-
-      <section class="grid-two">
-        <article class="card">
-          <div class="section-head compact"><div><span class="eyebrow">Mapa</span><h2>Cobertura, locales y concentración de demanda</h2></div></div>
-          <div class="map-controls">
-            <label><input type="checkbox" id="toggleStores" checked> Locales</label>
-            <label><input type="checkbox" id="togglePriority" checked> Zonas prioritarias</label>
-            <label><input type="checkbox" id="toggleDemand" checked> Demanda potencial</label>
+      <section id="overview" class="module-block">
+        <div class="section-title-row sticky-gap">
+          <div>
+            <p class="eyebrow">Overview</p>
+            <h2>Resumen ejecutivo</h2>
           </div>
-          <div id="map" class="map-shell"></div>
-        </article>
-        <article class="card">
-          <div class="section-head compact"><div><span class="eyebrow">Simulador</span><h2>Meta de 7,500 órdenes / mes</h2></div></div>
-          <div class="sim-grid">
-            <div><label>Usuarios activos</label><input id="simUsers" type="number"></div>
-            <div><label>% expuestos a Tambo</label><input id="simExposure" type="number" step="0.1"></div>
-            <div><label>CTR hacia Tambo (%)</label><input id="simCtr" type="number" step="0.1"></div>
-            <div><label>Conversión a orden (%)</label><input id="simConversion" type="number" step="0.1"></div>
-            <div><label>% mix delivery</label><input id="simDeliveryMix" type="number" step="0.1" value="70"></div>
-            <div><label>Órdenes por driver / día</label><input id="simOrdersDriver" type="number" step="0.1"></div>
-            <div><label>Días operativos / mes</label><input id="simDays" type="number"></div>
-            <div><label>Meta total órdenes / mes</label><input id="simTarget" type="number" value="7500"></div>
-          </div>
-          <div id="simulatorOutput" class="sim-output"></div>
-          <div id="staffingCards" class="staffing-grid"></div>
-        </article>
-      </section>
-
-      <section class="card table-card">
-        <div class="section-head compact"><div><span class="eyebrow">Detalle</span><h2>Performance por local</h2></div></div>
-        <div class="table-wrap">
-          <table id="localTable">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
         </div>
+        <div id="kpiGrid" class="kpi-grid"></div>
+        <div class="split-grid overview-grid">
+          <article class="card">
+            <div class="section-title-row compact">
+              <div>
+                <p class="eyebrow">Key highlights</p>
+                <h3>Lo más importante con la configuración actual</h3>
+              </div>
+            </div>
+            <div id="highlightsGrid" class="highlights-grid"></div>
+          </article>
+          <article class="card tone-card">
+            <div class="section-title-row compact">
+              <div>
+                <p class="eyebrow">Lectura rápida</p>
+                <h3>Qué está pasando</h3>
+              </div>
+            </div>
+            <div id="overviewNarrative" class="narrative"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="ecommerce" class="module-block">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">E-commerce total Tambo</p>
+            <h2>Negocio observado por mes, mix y cobertura</h2>
+          </div>
+        </div>
+        <div class="split-grid ecommerce-grid">
+          <article class="card chart-card">
+            <div class="section-title-row compact"><div><h3>Orders y GMV mensual</h3></div></div>
+            <canvas id="monthlyChart" class="chart-canvas small"></canvas>
+          </article>
+          <article class="card chart-card">
+            <div class="section-title-row compact"><div><h3>Mix por tipo de entrega</h3></div></div>
+            <canvas id="mixChart" class="chart-canvas small"></canvas>
+          </article>
+          <article class="card chart-card">
+            <div class="section-title-row compact"><div><h3>Locales activos por cobertura</h3></div></div>
+            <canvas id="coverageChart" class="chart-canvas small"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <section id="project" class="module-block">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">Proyecto Tambo × inDrive</p>
+            <h2>Oportunidad, activación por zonas y staffing</h2>
+          </div>
+        </div>
+        <div class="story-grid">
+          <article class="card tone-card">
+            <p class="eyebrow">Oportunidad</p>
+            <h3>Demanda potencial y alcance</h3>
+            <div id="opportunityNarrative" class="narrative"></div>
+          </article>
+          <article class="card tone-card">
+            <p class="eyebrow">Plan de activación</p>
+            <h3>Zonas prioritarias para abrir visibilidad</h3>
+            <div id="activationNarrative" class="narrative"></div>
+          </article>
+          <article class="card tone-card">
+            <p class="eyebrow">Riesgo operativo</p>
+            <h3>Qué cuidar antes de escalar</h3>
+            <div id="riskNarrative" class="narrative"></div>
+          </article>
+        </div>
+        <div class="split-grid project-grid">
+          <article class="card chart-card">
+            <div class="section-title-row compact"><div><h3>Áreas prioritarias</h3></div></div>
+            <canvas id="priorityChart" class="chart-canvas small"></canvas>
+          </article>
+          <article class="card">
+            <div class="section-title-row compact"><div><h3>Simulador de 7,500 órdenes / mes</h3></div></div>
+            <div class="sim-grid">
+              <div><label>Usuarios activos</label><input id="simUsers" type="number"></div>
+              <div><label>% audiencia expuesta</label><input id="simExposure" type="number" step="0.1"></div>
+              <div><label>CTR hacia Tambo (%)</label><input id="simCtr" type="number" step="0.1"></div>
+              <div><label>Conversión a orden (%)</label><input id="simConversion" type="number" step="0.1"></div>
+              <div><label>% mix delivery</label><input id="simDeliveryMix" type="number" step="0.1"></div>
+              <div><label>Órdenes por driver por día</label><input id="simOrdersDriver" type="number" step="0.1"></div>
+              <div><label>Días operativos al mes</label><input id="simDays" type="number"></div>
+              <div><label>Meta total de órdenes</label><input id="simTarget" type="number" value="7500"></div>
+            </div>
+            <div id="simulatorOutput" class="sim-output"></div>
+            <div id="staffingCards" class="staffing-grid"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="operations" class="module-block">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">Operación</p>
+            <h2>SLA y etapas del ciclo de vida delivery</h2>
+          </div>
+        </div>
+        <div class="split-grid ops-grid">
+          <article class="card chart-card">
+            <div class="section-title-row compact"><div><h3>Tiempo típico por etapa (P50)</h3></div></div>
+            <canvas id="cycleChart" class="chart-canvas small"></canvas>
+          </article>
+          <article class="card chart-card">
+            <div class="section-title-row compact"><div><h3>Drivers activos por mes</h3></div></div>
+            <canvas id="driversChart" class="chart-canvas small"></canvas>
+          </article>
+          <article class="card chart-card wide">
+            <div class="section-title-row compact"><div><h3>Top locales por SLA y volumen</h3></div></div>
+            <canvas id="localRankChart" class="chart-canvas small"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <section id="coverage" class="module-block">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">Cobertura</p>
+            <h2>Mapa de locales, prioridad y concentración de demanda</h2>
+          </div>
+        </div>
+        <div class="split-grid coverage-grid">
+          <article class="card map-card">
+            <div class="map-toolbar">
+              <label><input type="checkbox" id="toggleStores" checked> Locales</label>
+              <label><input type="checkbox" id="toggleDemand" checked> Demanda</label>
+              <label><input type="checkbox" id="togglePriority" checked> Prioridad</label>
+              <label><input type="checkbox" id="toggleNoCoverage" checked> Sin delivery</label>
+            </div>
+            <div id="map" class="map-shell"></div>
+          </article>
+          <article class="card tone-card">
+            <p class="eyebrow">Cobertura</p>
+            <h3>Cómo leer el mapa</h3>
+            <div id="coverageNarrative" class="narrative"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="locals" class="module-block">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">Locales</p>
+            <h2>Detalle por local</h2>
+          </div>
+        </div>
+        <article class="card table-card">
+          <div class="table-wrap">
+            <table id="localTable">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </article>
       </section>
     </main>
   </div>
